@@ -177,3 +177,181 @@
 
         .copy-hint {
             display: block;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        /* Discord Button */
+        .btn-discord {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--discord);
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-discord:hover {
+            background: #4752C4;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn-discord i {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="main-card">
+        <img src="http://googleusercontent.com/image_collection/image_retrieval/16776789238450110154_0" alt="ZoroMC" class="logo-img" onerror="this.src='https://via.placeholder.com/120/020b16/00d2ff?text=ZM'">
+        <h1>ZOROMC</h1>
+        <div class="owner-info">SMARTGRAPH AKA GAURAV WADEKAR</div>
+        
+        <p class="desc">
+            India's #1 Lifesteal & Economy Server. <br>Join the legend today.
+        </p>
+
+        <div class="features-container">
+            <div class="chip">⚔️ Lifesteal</div>
+            <div class="chip">💰 Economy</div>
+            <div class="chip">🏢 Lobby</div>
+            <div class="chip">🤺 PvP</div>
+            <div class="chip">🎫 Events</div>
+        </div>
+
+        <div class="ip-container" onclick="copyIP(this)">
+            <p><span>IP:</span> play.zoromc.qzz.io</p>
+            <p><span>PORT:</span> 19107</p>
+            <span class="copy-hint">(Click to copy to clipboard)</span>
+        </div>
+
+        <a href="https://discord.gg/JmF5Ru9BJ6" target="_blank" class="btn-discord">
+            <i class="ph ph-discord-logo"></i> JOIN DISCORD
+        </a>
+    </div>
+
+    <script>
+        // Upgraded Constellation Particle System
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const connectionDistance = 120;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Bounce off edges smoothly
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 210, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            // Adjust particle count based on screen size so mobile isn't laggy
+            let particleCount = Math.floor(window.innerWidth / 15);
+            if (particleCount > 100) particleCount = 100;
+            
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawLines() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        let opacity = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(0, 210, 255, ${opacity * 0.3})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            init();
+            createParticles();
+        });
+
+        // Initialize background
+        init();
+        createParticles();
+        animate();
+
+        // Smooth Copy Function
+        function copyIP(element) {
+            const ipString = "play.zoromc.qzz.io:19107";
+            navigator.clipboard.writeText(ipString).then(() => {
+                const hint = element.querySelector('.copy-hint');
+                const originalText = hint.innerText;
+                
+                hint.innerText = "✓ Copied to clipboard!";
+                hint.style.color = "#00d2ff";
+                hint.style.opacity = "1";
+                hint.style.fontWeight = "bold";
+
+                setTimeout(() => {
+                    hint.innerText = originalText;
+                    hint.style.color = "";
+                    hint.style.opacity = "0.6";
+                    hint.style.fontWeight = "normal";
+                }, 2000);
+            }).catch(err => {
+                console.error("Failed to copy", err);
+            });
+        }
+    </script>
+</body>
+</html>
