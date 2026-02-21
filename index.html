@@ -1,227 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZOROMCSTORE | Official Minecraft Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZoroMC | Premium Experience</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --blue-glow: #00d2ff;
+            --dark-bg: #020b16;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* No scroll for that app feel */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Orbitron',sans-serif;
-}
+        /* Particles Canvas - Real Motion */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 0;
+        }
 
-body{
-    background:linear-gradient(135deg,#0f0f0f,#1a1a2e);
-    color:white;
-}
+        /* Glassmorphism Card with Neon Border */
+        .main-card {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
 
-header{
-    padding:40px 20px;
-    text-align:center;
-    background:#111;
-    border-bottom:2px solid #00ffcc;
-}
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
 
-header h1{
-    font-size:42px;
-    color:#00ffcc;
-    letter-spacing:3px;
-}
+        /* Logo Animation */
+        .logo-img {
+            width: 110px;
+            filter: drop-shadow(0 0 20px var(--blue-glow));
+            animation: pulse 3s infinite;
+        }
 
-header p{
-    margin-top:10px;
-    font-size:14px;
-    color:#aaa;
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
 
-.section{
-    padding:50px 10%;
-}
+        h1 {
+            font-size: 2.5rem;
+            margin: 15px 0 5px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(to right, #fff, var(--blue-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.section h2{
-    text-align:center;
-    margin-bottom:40px;
-    font-size:28px;
-    color:#00ffcc;
-}
+        .owner-info {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--blue-glow);
+            margin-bottom: 25px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
+        /* Feature Chips with Glass effect */
+        .features-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
 
-.card{
-    background:#16213e;
-    padding:25px;
-    border-radius:12px;
-    text-align:center;
-    transition:0.3s;
-    border:1px solid #00ffcc33;
-}
+        .chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
 
-.card:hover{
-    transform:translateY(-8px);
-    border-color:#00ffcc;
-}
+        .chip:hover {
+            background: var(--blue-glow);
+            color: #000;
+            box-shadow: 0 0 15px var(--blue-glow);
+        }
 
-.card h3{
-    margin-bottom:10px;
-    font-size:20px;
-}
+        /* IP Box */
+        .ip-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--blue-glow);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
 
-.price{
-    font-size:18px;
-    margin:10px 0;
-    color:#00ffcc;
-}
+        .ip-container p { margin: 5px 0; font-family: monospace; }
+        .ip-container span { color: var(--blue-glow); }
 
-.buy-btn{
-    display:inline-block;
-    padding:10px 20px;
-    background:#00ffcc;
-    color:#000;
-    text-decoration:none;
-    border-radius:6px;
-    font-weight:bold;
-    transition:0.3s;
-}
+        /* Discord Button */
+        .btn-discord {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #5865F2, #404eed);
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 15px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
 
-.buy-btn:hover{
-    background:white;
-}
+        .btn-discord:hover {
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.6);
+            transform: scale(1.02);
+        }
 
-.discord-section{
-    text-align:center;
-    padding:50px 20px;
-    background:#111;
-    border-top:2px solid #00ffcc;
-}
-
-.discord-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 25px;
-    background:#5865F2;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-    font-weight:bold;
-    margin-top:15px;
-    transition:0.3s;
-}
-
-.discord-btn:hover{
-    background:#4752c4;
-}
-
-footer{
-    text-align:center;
-    padding:20px;
-    font-size:12px;
-    background:#0f0f0f;
-    color:#777;
-}
-</style>
+    </style>
 </head>
-
 <body>
 
-<header>
-    <h1>ZOROMCSTORE</h1>
-    <p>Premium Ranks & Crates for Minecraft Players</p>
-</header>
+    <canvas id="bg-canvas"></canvas>
 
-<section class="section">
-    <h2>👑 Server Ranks</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>👑 LEGEND RANK</h3>
-            <div class="price">₹349</div>
-            <p>Ultimate prestige and powerful perks.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
+    <div class="main-card">
+        <img src="http://googleusercontent.com/image_collection/image_retrieval/16776789238450110154_0" alt="ZoroMC" class="logo-img">
+        <h1>ZOROMC</h1>
+        <div class="owner-info">SMARTGRAPH AKA GAURAV WADEKAR</div>
+        
+        <p style="opacity: 0.8; font-size: 0.95rem; margin-bottom: 20px;">
+            India's #1 Lifesteal & Economy Server. <br>Join the legend today.
+        </p>
+
+        <div class="features-container">
+            <div class="chip">⚔️ Lifesteal</div>
+            <div class="chip">💰 Economy</div>
+            <div class="chip">🏢 Lobby</div>
+            <div class="chip">🤺 PvP</div>
+            <div class="chip">🎫 Events</div>
         </div>
 
-        <div class="card">
-            <h3>⚔️ MASTER RANK</h3>
-            <div class="price">₹249</div>
-            <p>Advanced features with strong abilities.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
+        <div class="ip-container" onclick="copyIP()">
+            <p><span>IP:</span> play.zoromc.qzz.io</p>
+            <p><span>PORT:</span> 19107</p>
+            <small style="font-size: 0.6rem; opacity: 0.5;">(Click to copy)</small>
         </div>
 
-        <div class="card">
-            <h3>💎 ELITE RANK</h3>
-            <div class="price">₹149</div>
-            <p>Exclusive bonuses and stylish perks.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
-
-        <div class="card">
-            <h3>🛡️ KNIGHT RANK</h3>
-            <div class="price">₹99</div>
-            <p>Strong starter advantages.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
-
-        <div class="card">
-            <h3>🎖️ WARRIOR RANK</h3>
-            <div class="price">₹69</div>
-            <p>Affordable rank with essential perks.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
+        <a href="https://discord.gg/JmF5Ru9BJ6" target="_blank" class="btn-discord">
+            <i class="ph ph-discord-logo"></i> JOIN DISCORD
+        </a>
     </div>
-</section>
 
-<section class="section">
-    <h2>🎁 Premium Crates</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>👑 MONTHLY CRATE</h3>
-            <div class="price">₹99</div>
-            <p>Exclusive monthly rewards.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
+    <script>
+        // Particle System for Motion Blue effect
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        <div class="card">
-            <h3>💠 EPIC CRATE</h3>
-            <div class="price">₹79</div>
-            <p>Epic loot and powerful surprises.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
 
-        <div class="card">
-            <h3>🥳 PARTY CRATE</h3>
-            <div class="price">₹49</div>
-            <p>Fun rewards and exciting bonuses.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = 'rgba(0, 210, 255, ' + Math.random() * 0.5 + ')';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.001;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
-        <div class="card">
-            <h3>⚔️ CLASSIC CRATE</h3>
-            <div class="price">₹19</div>
-            <p>Budget crate packed with items.</p>
-            <a href="#" class="buy-btn">Buy Now</a>
-        </div>
-    </div>
-</section>
+        function createParticles() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
 
-<section class="discord-section">
-    <h2>Join Our Discord Community</h2>
-    <p>Free to Join • Events • Updates • Giveaways</p>
-    <a href="https://discord.gg/yJ9ae9uN" class="discord-btn" target="_blank">
-        🎧 Join Discord
-    </a>
-</section>
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                    particles.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animate);
+        }
 
-<footer>
-    © 2026 ZOROMCSTORE | Not affiliated with Minecraft or Mojang
-</footer>
+        window.addEventListener('resize', init);
+        init();
+        createParticles();
+        animate();
 
+        function copyIP() {
+            navigator.clipboard.writeText("play.zoromc.qzz.io:19107");
+            alert("IP & Port Copied!");
+        }
+    </script>
 </body>
 </html>
